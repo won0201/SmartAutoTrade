@@ -1,0 +1,16 @@
+# Colab (1단계) 호환 라이브러리
+numpy==2.0.2
+pandas==2.2.2
+ta==0.11.0
+statsmodels>=0.14.2
+scikit-learn>=1.5.1
+
+# 모델 및 데이터 관련
+xgboost>=2.1.1
+tensorflow
+yfinance
+
+# KIS API 및 웹소켓 관련
+requests
+websockets
+pycryptodome
