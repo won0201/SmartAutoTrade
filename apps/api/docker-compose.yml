@@ -1,0 +1,10 @@
+services:
+  api:
+    container_name: api
+    build: .
+    working_dir: /app
+    environment:
+      - TZ=Asia/Seoul
+    ports:
+      - "8000:8000"
+    # 네트워크는 나중에 team-net 다시 붙이면 됨
