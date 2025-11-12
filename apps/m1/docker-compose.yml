@@ -1,0 +1,14 @@
+services:
+  m1:
+    build: .
+    container_name: m1
+    environment:
+      - PORT=7101
+      - FLASK_ENV=development 
+    ports:
+      - "7101:7101"
+
+    volumes:
+      - ./app:/app:rw
+
+    restart: unless-stopped

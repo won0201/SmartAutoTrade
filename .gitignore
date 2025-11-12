@@ -1,0 +1,13 @@
+apps/**/__pycache__/
+apps/**/.pytest_cache/
+apps/**/.ipynb_checkpoints/
+apps/**/*.pyc
+apps/**/.env
+apps/**/.vscode/
+apps/**/.idea/
+apps/**/.DS_Store
+apps/**/logs/
+apps/**/dist/
+apps/**/build/
+apps/**/.docker/**
+apps/**/tmp/
