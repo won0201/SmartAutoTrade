@@ -1,12 +1,34 @@
 services:
-  m3:
-    build: .
-    container_name: m3
-    environment:
-      - PORT=7103
-      - FLASK_ENV=development 
+  m3-app1:
+    build:
+      context: ./apps/m3-app1
+      dockerfile: app1.dockerfile
+    container_name: m3-app1
     ports:
-      - "7103:7103"
+      - "2025:8080"
     volumes:
-      - ./app:/app:rw
+      - /home/ec2-user/SmartAutoTrade/apps/m3/apps/m3-app1/data:/srv/apps/m3/data
+    restart: unless-stopped
+
+  m3-app2:
+    build:
+      context: ./apps/m3-app2
+      dockerfile: app2.dockerfile
+    container_name: m3-app2
+    ports:
+      - "2026:8085"
+    volumes:
+      - ./apps/m3-app2/data:/app/data
+    restart: unless-stopped
+
+  vue-frontend:
+    build:
+      context: ./Webapp
+      dockerfile: web.dockerfile
+    container_name: vue-frontend
+    ports:
+      - "2027:2027"
+    depends_on:
+      - m3-app1
+      - m3-app2
     restart: unless-stopped
