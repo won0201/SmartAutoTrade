@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "chart.js": "^4.5.1",
+    "framer-motion": "^12.23.24",
+    "vue-toastification": "^2.0.0-rc.5"
+  },
+  "devDependencies": {
+    "path": "^0.12.7"
+  }
+}
