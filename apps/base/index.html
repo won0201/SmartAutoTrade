@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SIGMA — 전시 데모</title>
+  <meta name="color-scheme" content="dark light">
+  <link rel="stylesheet" href="main.css" />
+</head>
+<body>
+  <div class="wrap">
+    <!-- 왼쪽 그리드 레일 (전시용 질감) -->
+    <div class="rail"></div>
+
+    <!-- 브랜드 칩 -->
+    <div class="brand-chip">
+      <div class="brand-icon">Σ</div>
+      <strong>SIGMA</strong>
+    </div>
+
+    <!-- 우측 캡슐 메뉴 -->
+    <nav class="menu" aria-label="주 메뉴">
+      <!-- ▼ A 프로젝트 React/Vite 대시보드로 이동 -->
+      <a class="pill" href="http://localhost:5173" target="_blank">시장상황분석</a>
+
+      <a class="pill" href="./trading.html">트레이딩</a>
+      <a class="pill" href="./risk-management.html">리스크 관리</a>
+      <button class="pill mode" id="modeToggle" title="테마 전환">🌓</button>
+    </nav>
+
+    <!-- 히어로 -->
+    <section class="hero">
+      <div>
+        <h1 class="headline">
+          <span class="accent">시장상황 분석과</span><br>
+          옵션 스큐 분석을 통한<br>
+          자동매매 시스템
+          <i class="underline"></i>
+        </h1>
+        <p class="sub">
+          A: 시장상황분석(Transformer+스태킹) → B: 트레이딩(실행) → C: 리스크 관리.
+        </p>
+      </div>
+
+      <!-- 오늘의 스냅샷 패널 (실시간 바인딩 대상) -->
+      <aside class="panel" aria-label="오늘의 스냅샷">
+        <div class="panel-head">
+          <strong>오늘의 스냅샷</strong>
+          <span class="api-hint">실시간: WebSocket /ws · 폴백: /api/snapshot</span>
+        </div>
+
+        <!-- KPI 1열 -->
+        <div class="kpi">
+          <div class="ring">
+            <div class="dial" id="dial-r2"></div>
+            <div>
+              <div class="label">예측 R² (A)</div>
+              <div class="value" id="val-r2">—</div>
+            </div>
+          </div>
+
+          <div class="ring">
+            <div class="dial" id="dial-signal"></div>
+            <div>
+              <div class="label">시그널 강도</div>
+              <div class="value" id="val-signal">—</div>
+            </div>
+          </div>
+
+          <div class="ring">
+            <div class="dial" id="dial-var"></div>
+            <div>
+              <div class="label">VaR (C)</div>
+              <div class="value" id="val-var">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 2열 -->
+        <div class="kpi kpi-bottom">
+          <div class="ring">
+            <div class="dial" id="dial-pos"></div>
+            <div>
+              <div class="label">포지션 (B)</div>
+              <div class="value" id="val-pos">—</div>
+            </div>
+          </div>
+
+          <div class="ring">
+            <div class="dial" id="dial-dd"></div>
+            <div>
+              <div class="label">DD (C)</div>
+              <div class="value" id="val-dd">—</div>
+            </div>
+          </div>
+
+          <div class="ring">
+            <div class="dial" id="dial-upd"></div>
+            <div>
+              <div class="label">업데이트</div>
+              <div class="value" id="val-upd">—</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- 프로젝트 카드 -->
+    <section class="grid">
+      <article class="card">
+        <h3>시장상황분석 (A)</h3>
+        <p>7개 딥러닝 모델과 XGBoost 앙상블로 KOSPI200을 실시간 분석하는 신호·신뢰도 산출 시스템.</p>
+
+        <!-- ▼ A 프로젝트로 이동 -->
+        <a class="go" href="http://localhost:5173" target="_blank">이동하기 →</a>
+      </article>
+
+      <article class="card">
+        <h3>트레이딩 (B)</h3>
+        <p>시장상황 분석 모델과 연동된 IV Skew기반 동적 트레이딩(BOCPD + Adaptive 신호).</p>
+        <a class="go" href="./trading.html">이동하기 →</a>
+      </article>
+
+      <article class="card">
+        <h3>리스크 관리 (C)</h3>
+        <p>MACD·RSI·OBV·CCI·볼린저밴드 기반 AI 매도 신호 분류와 포트폴리오 VaR/ES·Sharpe 분석.</p>
+        <a class="go" href="./risk-management.html">이동하기 →</a>
+      </article>
+    </section>
+
+    <!-- 하단 티커 -->
+    <div class="ticker">
+      <div class="tape" id="tape">
+        <span><span class="tag">SIGMA</span> · R² <b id="tk-r2">—</b></span>
+        <span>Signal <b id="tk-signal">—</b></span>
+        <span>VaR <b id="tk-var">—</b></span>
+        <span>DD <b id="tk-dd">—</b></span>
+        <span>Updated <b id="tk-upd">—</b></span>
+
+        <span><span class="tag">SIGMA</span> · R² <b>—</b></span>
+        <span>Signal <b>—</b></span>
+        <span>VaR <b>—</b></span>
+        <span>DD <b>—</b></span>
+        <span>Updated <b>—</b></span>
+      </div>
+    </div>
+
+    <footer>© 2025 SIGMA — A: 시장상황분석 · B: 트레이딩 · C: 리스크 관리</footer>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
