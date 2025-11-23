@@ -1,19 +1,15 @@
 <template>
   <div class="asset-page">
-    <!-- 상단 헤더 -->
     <div class="page-header">
       <h1>Risk Analysis</h1>
       <button class="home-btn" @click="goHome">🏠 홈으로</button>
     </div>
 
-    <!-- 고정 위젯 -->
     <div class="fixed-widget">
       <AssetWidget />
     </div>
 
     <div class="main-content">
-
-      <!-- 아코디언 섹션 -->
       <div class="accordion-container">
         <div v-for="(chart, i) in charts" :key="chart.name" class="accordion-item">
           <div class="accordion-header" @click="toggleAccordion(i)">
@@ -21,24 +17,21 @@
             <span>{{ chart.open ? '▲' : '▼' }}</span>
           </div>
 
-          <div class="accordion-body" v-if="chart.open">
-
-            <!-- Portfolio Optimization -->
+          <!-- v-show 사용 -->
+          <div class="accordion-body" v-show="chart.open">
             <PortfolioOptimization
               v-if="chart.name === 'Portfolio Optimization Result'"
               :url="chart.url"
               :refreshInterval="10000"
             />
 
-            <!-- ES Plot (PNG 직접 로딩) -->
-             <ESplot
+            <ESplot
               v-if="chart.name === '시계열 조건부 변동성(ES) 그래프'"
               :title="chart.name"
               :url="chart.url"
               :refreshInterval="10000"
             />
 
-            <!-- Z-score 위험 알림 -->
             <div v-if="chart.name === 'Z-score 위험 알림'">
               <table class="risk-table">
                 <thead>
@@ -69,7 +62,6 @@
         </div>
       </div>
 
-      <!-- 이상치 그래프 카드 -->
       <div class="cards-container">
         <DetectionCard
           v-for="card in graphCards"
@@ -79,10 +71,62 @@
           :refreshInterval="10000"
         />
       </div>
-
     </div>
   </div>
 </template>
+
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import { useRouter } from "vue-router";
+
+import AssetWidget from "../components/AssetWidget.vue";
+import ESplot from "../components/ESplot.vue";
+import PortfolioOptimization from "../components/Portplot.vue";
+import DetectionCard from "../components/DetectionCard.vue";
+
+const router = useRouter();
+const goHome = () => router.push("/");
+
+// charts 배열
+const charts = ref([
+  { name: "Portfolio Optimization Result", url: "http://13.211.78.215:2025/optimize/plot", open: true },
+  { name: "시계열 조건부 변동성(ES) 그래프", url: "http://13.211.78.215:2025/es_cutoff_all", open: true },
+  { name: "Z-score 위험 알림", url: null, open: true },
+]);
+
+const toggleAccordion = (index) => {
+  charts.value[index].open = !charts.value[index].open;
+};
+
+// 이상치 그래프 카드
+const graphCards = ref([
+  { title: "SVM Asset Anomaly Detection", url: "http://13.211.78.215:2025/svm/plot/svm_iso" },
+  { title: "ANN Asset Anomaly Detection", url: "http://13.211.78.215:2025/ann/plot/ann_iso" },
+]);
+
+// WebSocket 상태
+const messages = ref([]);
+let ws = null;
+
+onMounted(() => {
+  ws = new WebSocket("ws://13.211.78.215:2025/ws/alerts");
+
+  ws.onmessage = (event) => {
+    try {
+      const data = JSON.parse(event.data);
+      const newMessages = Array.isArray(data) ? data : [data];
+      messages.value = [...newMessages, ...messages.value].slice(0, 20);
+    } catch (err) {
+      console.error("WS 파싱 오류:", err);
+    }
+  };
+});
+
+onBeforeUnmount(() => {
+  if (ws && ws.readyState === WebSocket.OPEN) ws.close();
+});
+</script>
+
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
@@ -102,8 +146,8 @@ const goHome = () => router.push("/");
 // 아코디언 차트 상태
 // --------------------
 const charts = ref([
-  { name: "Portfolio Optimization Result", url: "http://localhost:2025/optimize/plot", open: false },
-  { name: "시계열 조건부 변동성(ES) 그래프", url: "http://localhost:2025/es_cutoff_all", open: false }, // PNG URL
+  { name: "Portfolio Optimization Result", url: "http://13.211.78.215:2026/optimize/plot", open: true },
+  { name: "시계열 조건부 변동성(ES) 그래프", url: "http://13.211.78.215:2026/es_cutoff_all", open: true },
   { name: "Z-score 위험 알림", url: null, open: true },
 ]);
 
@@ -115,8 +159,8 @@ const toggleAccordion = (index) => {
 // 이상치 그래프 카드 상태
 // --------------------
 const graphCards = ref([
-  { title: "SVM Asset Anomaly Detection", url: "http://localhost:2026/svm/plot/svm_iso" },
-  { title: "ANN Asset Anomaly Detection", url: "http://localhost:2026/ann/plot/ann_iso" },
+  { title: "SVM Asset Anomaly Detection", url: "http://13.211.78.215:2026/svm/plot/svm_iso" },
+  { title: "ANN Asset Anomaly Detection", url: "http://13.211.78.215:2026/ann/plot/ann_iso" },
 ]);
 
 // --------------------
@@ -126,7 +170,7 @@ const messages = ref([]);
 let ws = null;
 
 onMounted(() => {
-  ws = new WebSocket("ws://localhost:2026/ws/alerts");
+  ws = new WebSocket("ws://13.211.78.215:2026/ws/alerts");
 
   ws.onmessage = (event) => {
     try {
@@ -143,8 +187,6 @@ onBeforeUnmount(() => {
   if (ws && ws.readyState === WebSocket.OPEN) ws.close();
 });
 </script>
-
-
 
 <style scoped>
 .asset-page {

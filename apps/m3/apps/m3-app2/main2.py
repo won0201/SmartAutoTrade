@@ -18,7 +18,7 @@ async def root():
     return {"message": "FastAPI 서버가 정상적으로 작동 중입니다."}
 
 
-origins = ["http://localhost:5173","http://localhost:8080"]
+origins = ["http://13.211.78.215:2027"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -26,13 +26,10 @@ app.add_middleware(
     allow_headers=["*"],     # 모든 헤더 허용
 )
 
-
 app.include_router(riskscore_router)
-
 app.include_router(riskstats_router)
 
 app.include_router(svm_plot_router, prefix="/svm")
-
 app.include_router(ann_plot_router, prefix="/ann")
 
 

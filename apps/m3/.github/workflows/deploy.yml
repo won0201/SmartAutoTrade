@@ -1,0 +1,52 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main  # main 브랜치에 push 시 자동 실행
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ 코드 체크아웃
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      # 2️⃣ Docker Buildx 설정
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # 3️⃣ Docker Hub 로그인 (PAT 사용)
+      - name: Login to Docker registry
+        uses: docker/login-action@v2
+        with:
+          username: dbjin38                     # Docker Hub 계정
+          password: ${{ secrets.DOCKER_PAT }}  # GitHub Secrets에 저장된 Docker PAT
+
+      # 4️⃣ Backend 이미지 빌드 & 푸시
+      - name: Build and push backend image
+        run: |
+          docker build -t myapp-backend:latest ./backend
+          docker tag myapp-backend:latest dbjin38/myapp-backend:latest
+          docker push dbjin38/myapp-backend:latest
+
+      # 5️⃣ Frontend 이미지 빌드 & 푸시
+      - name: Build and push frontend image
+        run: |
+          docker build -t myapp-frontend:latest ./frontend
+          docker tag myapp-frontend:latest dbjin38/myapp-frontend:latest
+          docker push dbjin38/myapp-frontend:latest
+
+      # 6️⃣ EC2 서버 SSH 접속 후 Docker Compose 배포
+      - name: SSH and deploy to EC2
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SERVER_HOST }}         # ex: 13.211.78.215
+          username: ${{ secrets.SERVER_USER }}     # ex: ec2-user
+          key: ${{ secrets.SERVER_SSH_KEY }}       # GitHub Secrets에 PEM Key
+          script: |
+            cd /home/ubuntu/myapp
+            docker compose pull
+            docker compose up -d --build

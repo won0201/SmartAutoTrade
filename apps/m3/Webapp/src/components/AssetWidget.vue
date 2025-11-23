@@ -94,7 +94,7 @@ function fetchAssetPrices() {
 
   loadingMessage.value = "\u00A0";
 
-  fetch("http://localhost:8080/assets/prices")
+  fetch("http://13.211.78.215:2025/assets/prices")
     .then((res) => res.json())
     .then((data) => {
       assets.value = data.filter(

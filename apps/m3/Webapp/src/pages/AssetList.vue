@@ -24,7 +24,7 @@ const assets = ref([])
 const sortAsc = ref(true)
 
 onMounted(async () => {
-  const res = await fetch('http://localhost:2026/assets')
+  const res = await fetch("http://13.211.78.215:2026")
   assets.value = await res.json()
 })
 

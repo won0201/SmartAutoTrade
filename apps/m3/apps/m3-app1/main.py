@@ -25,7 +25,7 @@ app = FastAPI(title="M3 API")
 # CORS 설정
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080"],  # Vue 앱 포트
+    allow_origins=["http://13.211.78.215:2027"],  # Vue 앱 포트
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
