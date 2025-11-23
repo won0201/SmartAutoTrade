@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 기본 배경 및 Glass 효과 */
+body {
+  @apply bg-bgDark text-gray-200 font-sans;
+  background: radial-gradient(120% 150% at 50% 0%, #0B0C10 0%, #111827 100%);
+}
+
+/* Glass UI 공통 카드 스타일 */
+.glass-card {
+  @apply bg-glassLight backdrop-blur-md shadow-glass border border-white/10 rounded-2xl transition-transform duration-300 hover:scale-[1.02];
+}
+
+/* 그라데이션 텍스트 */
+.gradient-text {
+  @apply text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500;
+}
+
+/* 섹션 컨테이너 여백 */
+.section-container {
+  @apply mb-10;
+}
+
+.sidebar-link {
+  @apply text-gray-300 py-2 px-3 rounded-lg transition
+         hover:bg-white/10 hover:text-white;
+}
+
+.sidebar-active {
+  @apply bg-white/20 text-white font-semibold;
+}
