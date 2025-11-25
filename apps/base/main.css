@@ -1,0 +1,166 @@
+:root{
+  --ink: #0d0d10;
+  --paper: #f7f7fb;
+  --fg: #eaeaf3;
+  --muted: #9aa0b2;
+  --brand1: #7C4DFF; /* violet */
+  --brand2: #00D4FF; /* cyan  */
+  --accent: #22d3ee;
+  --ring-bg: #1b1c24;
+  --ring-track: #2a2d3a;
+  --border: rgba(255,255,255,.08);
+  --glass: rgba(255,255,255,.06);
+  --radius: 18px;
+  --maxw: 1280px;
+}
+
+/* 라이트/다크 테마 오버라이드 */
+body.light{
+  --fg: #14151a;
+  --muted: #606879;
+  --ring-bg: #f6f7fb;
+  --ring-track: #e7e9f1;
+  --border: rgba(0,0,0,.10);
+  --glass: rgba(0,0,0,.04);
+  background:
+    radial-gradient(60% 140% at 10% -10%, rgba(124,77,255,.12), transparent 60%),
+    radial-gradient(55% 120% at 110% 0%, rgba(0,212,255,.10), transparent 55%),
+    linear-gradient(180deg, #ffffff, #f8f9fd 60%, #ffffff) !important;
+  color: var(--fg);
+}
+
+*{ box-sizing:border-box }
+html,body{ height:100% }
+body{
+  margin:0;
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color:var(--fg);
+  background:
+    radial-gradient(60% 140% at 10% -10%, rgba(124,77,255,.25), transparent 60%),
+    radial-gradient(55% 120% at 110% 0%, rgba(0,212,255,.20), transparent 55%),
+    linear-gradient(180deg, #0b0c12, #0e1018 60%, #0b0c12);
+  overflow-x:hidden;
+}
+
+.wrap{max-width:var(--maxw); margin:0 auto; padding:28px 22px 26px; position:relative;}
+.rail{
+  position:absolute; inset:0 auto 0 22px; width:240px; pointer-events:none;
+  background:
+    linear-gradient(#ffffff08 1px, transparent 1px) 0 0/100% 28px,
+    linear-gradient(90deg, #ffffff08 1px, transparent 1px) 0 0/28px 100%;
+  mask: linear-gradient(90deg, black 0 88%, transparent);
+}
+
+/* Brand */
+.brand-chip{
+  position:relative; z-index:2; display:flex; align-items:center; gap:12px;
+  width:max-content; padding:10px 12px; border:1px solid var(--border); border-radius:14px;
+  background:linear-gradient(180deg, var(--glass), transparent);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+.brand-icon{
+  width:34px; height:34px; border-radius:10px; display:grid; place-items:center; color:white;
+  background: conic-gradient(from 210deg, var(--brand1), var(--brand2));
+  font-weight:900;
+}
+
+/* Right capsule menu */
+.menu{
+  position:absolute; right:22px; top:24px; display:flex; gap:10px; z-index:3;
+}
+.pill{
+  display:inline-flex; align-items:center; gap:10px; padding:10px 14px;
+  border-radius:999px; border:1px solid var(--border);
+  background:linear-gradient(180deg, var(--glass), transparent);
+  text-decoration:none; color:var(--fg); font-weight:700; font-size:.95rem;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.pill:hover{ transform: translateY(-2px); box-shadow:0 10px 30px rgba(0,0,0,.25) }
+.mode{ margin-left:6px; }
+
+/* Hero */
+.hero{
+  margin-top:80px; display:grid; grid-template-columns: 1.05fr .95fr; gap:34px; align-items:center;
+}
+@media (max-width: 980px){
+  .hero{ grid-template-columns: 1fr }
+  .menu{ position:static; margin-top:18px }
+  .rail{ display:none }
+}
+.headline{
+  font-size: clamp(32px, 5.4vw, 64px);
+  font-weight:900; line-height:1.06; letter-spacing:-.02em; position:relative;
+}
+.headline .accent{
+  background: linear-gradient(120deg, var(--brand1), var(--brand2));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.underline{
+  position:absolute; left:-6px; bottom:-8px; width:56%; height:16px;
+  background: linear-gradient(90deg, rgba(124,77,255,.45), rgba(0,212,255,.45));
+  transform: skewX(-16deg);
+  filter: blur(6px);
+  border-radius: 8px;
+}
+.sub{ margin-top:14px; color:var(--muted); max-width:64ch }
+
+/* Snapshot panel */
+.panel{
+  border:1px solid var(--border); border-radius:24px; padding:22px;
+  background: linear-gradient(180deg, rgba(255,255,255,.06), transparent);
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+.panel-head{
+  display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;
+}
+.api-hint{ color:var(--muted); font-size:12px }
+
+.kpi{
+  display:grid; grid-template-columns: repeat(3,1fr); gap:16px;
+}
+.kpi-bottom{ margin-top:14px }
+.ring{
+  display:grid; grid-template-columns: 64px 1fr; gap:12px; align-items:center;
+  padding:12px; border:1px solid var(--border); border-radius:16px; background: rgba(255,255,255,.03);
+}
+.ring .dial{
+  width:64px; height:64px; border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 50%, var(--ring-bg) 44%, transparent 45%),
+    conic-gradient(var(--brand1) 0deg, var(--brand2) 0deg, var(--ring-track) 0deg);
+  box-shadow: inset 0 0 0 1px var(--border), 0 8px 24px rgba(0,0,0,.25);
+}
+.ring .label{ font-size:12px; color:var(--muted) }
+.ring .value{ font-weight:900; font-size:20px; letter-spacing:.02em }
+
+/* Cards */
+.grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; margin-top:28px }
+@media (max-width:980px){ .grid{ grid-template-columns: 1fr 1fr } }
+@media (max-width:640px){ .grid{ grid-template-columns: 1fr } }
+.card{
+  border:1px solid var(--border); border-radius:18px; padding:18px;
+  background:linear-gradient(180deg, rgba(255,255,255,.04), transparent);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.card:hover{ transform:translateY(-3px); box-shadow:0 18px 40px rgba(0,0,0,.25) }
+.card h3{ margin:0 0 6px 0; font-size:16px; letter-spacing:.02em }
+.card p{ margin:0 0 12px 0; color:var(--muted) }
+.go{
+  display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:12px;
+  border:1px solid var(--border); text-decoration:none; color:var(--fg); font-weight:700;
+}
+
+/* Ticker */
+.ticker{
+  margin-top:26px; overflow:hidden; border:1px solid var(--border); border-radius:14px;
+  background: linear-gradient(180deg, rgba(255,255,255,.03), transparent);
+}
+.tape{
+  display:flex; gap:32px; padding:12px 18px; white-space:nowrap;
+  animation: roll 28s linear infinite;
+}
+@keyframes roll{ to{ transform: translateX(-50%) } }
+.tag{ font-weight:800; color:var(--accent) }
+
+footer{ margin:26px 0 8px; color:var(--muted); text-align:center; font-size:.9rem }
