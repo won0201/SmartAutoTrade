@@ -1,14 +1,23 @@
 services:
-  m1:
-    build: .
-    container_name: m1
-    environment:
-      - PORT=7101
-      - FLASK_ENV=development 
+  m1-backend:
+    build: ./backend
+    container_name: m1-backend
     ports:
       - "7101:7101"
-
     volumes:
-      - ./app:/app:rw
-
+      - ./backend/app:/app/app
     restart: unless-stopped
+
+  m1-frontend:
+    build: ./frontend
+    container_name: m1-frontend
+    ports:
+      - "7001:5173"
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+networks:
+  default:
+    driver: bridge
+
