@@ -1,11 +1,734 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>m2 Home</title>
-  </head>
-  <body>
-    <h1>m2 is alive !!!🚀</h1>
-    <p>{{ message }}</p>
-  </body>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>SIGMA – 옵션 Skew 트레이딩 대시보드</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- 기본 폰트 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      font-family: "Pretendard", system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
+      color: #f9fafb;
+      background:
+        radial-gradient(circle at 0% 0%, #4f46e5 0, transparent 55%),
+        radial-gradient(circle at 100% 0%, #06b6d4 0, transparent 55%),
+        #020617;
+      padding: 24px 32px 32px;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .app {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* 상단 헤더 */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #4f46e5, #22d3ee);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 20px;
+    }
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .logo-text-main {
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 1px;
+    }
+    .logo-text-sub {
+      font-size: 11px;
+      opacity: 0.65;
+    }
+
+    .nav {
+      display: flex;
+      gap: 12px;
+    }
+    .nav-btn {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.2), rgba(15, 23, 42, 0.9));
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s ease-out;
+    }
+    .nav-btn.active {
+      border-color: rgba(94, 234, 212, 0.9);
+      background: linear-gradient(135deg, rgba(129, 140, 248, 0.2), rgba(56, 189, 248, 0.18));
+      box-shadow: 0 0 0 1px rgba(94, 234, 212, 0.3);
+    }
+    .nav-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.7);
+    }
+
+    /* 메인 레이아웃 */
+    .main-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .hero {
+      padding: 28px 28px 24px;
+      border-radius: 24px;
+      background: radial-gradient(circle at top left, rgba(129, 140, 248, 0.24), rgba(15, 23, 42, 0.95));
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow:
+        0 18px 40px rgba(15, 23, 42, 0.95),
+        0 0 0 1px rgba(15, 23, 42, 0.99);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background-image:
+        radial-gradient(circle at 0 0, rgba(94, 234, 212, 0.11) 0, transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(129, 140, 248, 0.13) 0, transparent 60%);
+      opacity: 0.8;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+    }
+    .hero-eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      opacity: 0.7;
+      margin-bottom: 8px;
+    }
+    .hero-title {
+      font-size: 30px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+    .hero-title span.accent {
+      background: linear-gradient(135deg, #4f46e5, #22d3ee);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .hero-desc {
+      font-size: 13px;
+      opacity: 0.8;
+      max-width: 430px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .tag {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      opacity: 0.9;
+    }
+    .hero-footer-text {
+      font-size: 11px;
+      opacity: 0.75;
+    }
+
+    .hero-status-line {
+      margin-top: 12px;
+      font-size: 11px;
+      opacity: 0.72;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-status-pill {
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(94, 234, 212, 0.7);
+      font-size: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .dot-live {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.35);
+    }
+
+    /* 스냅샷 카드 */
+    .snapshot {
+      padding: 22px 22px 20px;
+      border-radius: 24px;
+      background: radial-gradient(circle at top right, rgba(15, 23, 42, 0.95), #020617);
+      border: 1px solid rgba(30, 64, 175, 0.8);
+      box-shadow:
+        0 18px 40px rgba(15, 23, 42, 0.95),
+        0 0 0 1px rgba(15, 23, 42, 1);
+    }
+    .snapshot-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 16px;
+    }
+    .snapshot-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .snapshot-sub {
+      font-size: 11px;
+      opacity: 0.6;
+      text-align: right;
+    }
+    .snapshot-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .metric-card {
+      border-radius: 18px;
+      padding: 14px 14px 12px;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .metric-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      opacity: 0.7;
+    }
+    .metric-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .metric-value {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .metric-unit {
+      font-size: 11px;
+      opacity: 0.65;
+    }
+    .metric-change {
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .metric-change.pos {
+      color: #4ade80;
+    }
+    .metric-change.neg {
+      color: #fb7185;
+    }
+    .metric-subtext {
+      font-size: 10px;
+      opacity: 0.6;
+    }
+
+    /* 하단: 최근 시그널 */
+    .bottom {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 24px;
+      align-items: flex-start;
+    }
+    .panel {
+      border-radius: 22px;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), #020617);
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      padding: 18px 20px 16px;
+      box-shadow:
+        0 18px 40px rgba(15, 23, 42, 0.95),
+        0 0 0 1px rgba(15, 23, 42, 1);
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 12px;
+    }
+    .panel-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .panel-sub {
+      font-size: 11px;
+      opacity: 0.6;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    thead {
+      background: rgba(15, 23, 42, 0.95);
+    }
+    th, td {
+      padding: 7px 8px;
+      text-align: left;
+      white-space: nowrap;
+    }
+    th {
+      font-weight: 500;
+      opacity: 0.7;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.9);
+    }
+    tbody tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    tbody tr:nth-child(odd) {
+      background: rgba(15, 23, 42, 0.3);
+    }
+    .signal-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 48px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .signal-buy {
+      background: rgba(34, 197, 94, 0.2);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.6);
+    }
+    .signal-sell {
+      background: rgba(239, 68, 68, 0.2);
+      color: #fb7185;
+      border: 1px solid rgba(248, 113, 113, 0.7);
+    }
+
+    /* 간단한 누적수익률 바 */
+    .pnl-bar-wrapper {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .pnl-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4ade80, #22d3ee);
+      width: 60%; /* JS에서 수정 */
+    }
+    .pnl-bar-label {
+      font-size: 10px;
+      opacity: 0.6;
+      margin-top: 4px;
+    }
+
+    .footer {
+      margin-top: 22px;
+      font-size: 10px;
+      text-align: center;
+      opacity: 0.55;
+    }
+
+    /* 반응형 */
+    @media (max-width: 960px) {
+      body {
+        padding: 16px 16px 20px;
+      }
+      .main-grid,
+      .bottom {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .snapshot {
+        order: -1;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <!-- 헤더 -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">Σ</div>
+      <div class="logo-text">
+        <div class="logo-text-main">SIGMA</div>
+        <div class="logo-text-sub">옵션 Skew &amp; 시장상황 기반 자동매매</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <button class="nav-btn">시장상황분석</button>
+      <button class="nav-btn active">트레이딩</button>
+      <button class="nav-btn">리스크 관리</button>
+    </nav>
+  </header>
+
+  <!-- 메인 상단 -->
+  <section class="main-grid">
+    <!-- 왼쪽: 설명 -->
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-eyebrow">KOSPI200 OPTIONS · IV SKEW</div>
+        <h1 class="hero-title">
+          시장상황 분석과<br />
+          <span class="accent">옵션 Skew 기반 Buy / Sell</span><br />
+          자동매매 시스템
+        </h1>
+        <p class="hero-desc">
+          옵션 Skew와 시장 상황을 결합해 매수·매도 신호를 생성하고, 전략의 수익률과 리스크 등을 한 화면에서 모니터링합니다.
+        </p>
+        <div class="hero-tags">
+          <div class="tag">IV Skew (Forward 기준)</div>
+          <div class="tag">BOCPD Regime Detection</div>
+          <div class="tag">Dynamic Position Sizing</div>
+          <div class="tag">ETF / 선물 연동</div>
+        </div>
+        <p class="hero-footer-text">
+          실계좌 연동 전까지는 모의 백테스트 결과를 기반으로 지표를 업데이트합니다.
+        </p>
+        <div class="hero-status-line">
+          <span class="hero-status-pill">
+            <span class="dot-live"></span> 실시간 WebSocket 구독중
+          </span>
+          <span>마지막 업데이트: <span id="last-updated">–</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 오른쪽: 오늘의 스냅샷 -->
+    <aside class="snapshot">
+      <div class="snapshot-header">
+        <h2 class="snapshot-title">오늘의 스냅샷</h2>
+        <div class="snapshot-sub">
+          데이터 소스: KRX 옵션 & 한국투자증권 OPEN API<br />
+         
+        </div>
+      </div>
+      <div class="snapshot-grid">
+        <!-- 현재 Skew -->
+        <div class="metric-card">
+          <div class="metric-label-row">
+            <span>현재 IV Skew</span>
+            <span id="skew-bucket-label">ATM±1</span>
+          </div>
+          <div class="metric-main">
+            <div>
+              <div class="metric-value" id="current-skew">–</div>
+              <div class="metric-unit">σ(풋) − σ(콜)</div>
+            </div>
+            <div class="metric-change" id="skew-change">–</div>
+          </div>
+          <div class="metric-subtext">
+            전일 대비 Skew 변화량 기준.
+          </div>
+        </div>
+
+        <!-- 현재 시그널 -->
+        <div class="metric-card">
+          <div class="metric-label-row">
+            <span>현재 시그널</span>
+            <span id="signal-strength-label">신뢰도 –</span>
+          </div>
+          <div class="metric-main">
+            <div class="metric-value" id="current-signal">–</div>
+            <div class="metric-change" id="signal-confidence">–</div>
+          </div>
+          <div class="metric-subtext">
+            Skew + Regime 조합으로 산출. 중립(Neutral) 구간에서는 포지션 축소.
+          </div>
+        </div>
+
+        <!-- 누적 수익률 -->
+        <div class="metric-card">
+          <div class="metric-label-row">
+            <span>YTD 누적 수익률</span>
+            <span>전략 PnL</span>
+          </div>
+          <div class="metric-main">
+            <div>
+              <div class="metric-value" id="cum-return">–</div>
+              <div class="metric-unit">vs KOSPI200</div>
+            </div>
+            <div class="metric-change pos" id="alpha">–</div>
+          </div>
+          <div class="metric-subtext">
+            동일 기간 벤치마크(KOSPI200 ETF) 대비 알파 기준.
+          </div>
+        </div>
+
+        <!-- 승률 / MDD -->
+        <div class="metric-card">
+          <div class="metric-label-row">
+            <span>승률 &amp; MDD</span>
+            <span id="trade-count-label">거래 수 –</span>
+          </div>
+          <div class="metric-main">
+            <div>
+              <div class="metric-value" id="win-rate">–</div>
+              <div class="metric-unit">Win Rate</div>
+            </div>
+            <div class="metric-change neg" id="max-dd">–</div>
+          </div>
+          <div class="metric-subtext">
+            백테스트 기준. 실거래 전 검증용 지표로 사용합니다.
+          </div>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- 하단: 최근 시그널 + PnL 요약 -->
+  <section class="bottom">
+    <div class="panel">
+      <div class="panel-header">
+        <div>
+          <h3 class="panel-title">최근 Skew 기반 시그널</h3>
+          <p class="panel-sub">옵션 만기/행사가 재정렬 후 계산된 Skew &amp; 포지션 내역</p>
+        </div>
+        <div class="panel-sub" id="signal-summary">–</div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+          <tr>
+            <th>시간</th>
+            <th>만기</th>
+            <th>Skew</th>
+            <th>시그널</th>
+            <th>진입가</th>
+            <th>수익률</th>
+            <th>누적 PnL</th>
+          </tr>
+          </thead>
+          <tbody id="signal-table-body">
+          <!-- JS로 채워짐 -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div>
+          <h3 class="panel-title">전략 성과 요약</h3>
+          <p class="panel-sub">단순 Buy&amp;Hold 대비</p>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px; margin-bottom:6px;">
+          전략 누적 수익률: <strong id="right-cum-return">–</strong><br />
+          벤치마크(KOSPI200): <span id="right-benchmark">–</span><br />
+          초과 수익(Alpha): <span id="right-alpha">–</span>
+        </div>
+        <div class="pnl-bar-wrapper">
+          <div class="pnl-bar-fill" id="pnl-bar"></div>
+        </div>
+        <div class="pnl-bar-label">
+          좌측 0%, 우측 100% 기준. 바 길이는 YTD 수익률(0~50% 구간)을 시각화한 값입니다.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    © 2025 SIGMA – M2 : 옵션 Skew 기반 트레이딩 모듈 · Demo UI (실데이터 연동 전)
+  </footer>
+</div>
+
+<script>
+  // ---- 여기는 나중에 실제 API로 교체할 부분 ----
+
+  // 더미 트레이드 데이터 (나중에 /api/m2/trades 같은 곳에서 받아오기)
+  const trades = [
+    {
+      time: "2025-11-19 10:05",
+      expiry: "202512",
+      skew: -3.2,
+      signal: "SELL",
+      price: 402.3,
+      ret: 0.8
+    },
+    {
+      time: "2025-11-19 09:40",
+      expiry: "202512",
+      skew: -1.7,
+      signal: "SELL",
+      price: 405.1,
+      ret: -0.4
+    },
+    {
+      time: "2025-11-18 14:20",
+      expiry: "202512",
+      skew: 1.1,
+      signal: "BUY",
+      price: 398.7,
+      ret: 1.6
+    },
+    {
+      time: "2025-11-18 11:10",
+      expiry: "202512",
+      skew: 0.3,
+      signal: "NEUTRAL",
+      price: 396.2,
+      ret: 0.0
+    }
+  ];
+
+  // YTD 성과 더미 (나중에 /api/m2/performance)
+  const performance = {
+    cumReturn: 18.4,      // %
+    benchmarkReturn: 9.2, // %
+    maxDrawdown: -6.5,    // %
+    winRate: 62.5,        // %
+    tradeCount: trades.length
+  };
+
+  // ---- DOM 업데이트 ----
+  function formatPct(x, digits = 1) {
+    const sign = x > 0 ? "+" : "";
+    return sign + x.toFixed(digits) + "%";
+  }
+
+  function initDashboard() {
+    // 마지막 업데이트 시간 (지금 시각)
+    const now = new Date();
+    const formatted =
+      now.getFullYear() + "-" +
+      String(now.getMonth() + 1).padStart(2, "0") + "-" +
+      String(now.getDate()).padStart(2, "0") + " " +
+      String(now.getHours()).padStart(2, "0") + ":" +
+      String(now.getMinutes()).padStart(2, "0");
+    document.getElementById("last-updated").textContent = formatted;
+
+    // 현재 트레이드(가장 최근)
+    const latest = trades[0];
+
+    // Skew 관련
+    document.getElementById("current-skew").textContent = latest.skew.toFixed(1);
+    // 전 거래와의 차이
+    if (trades.length > 1) {
+      const prev = trades[1].skew;
+      const diff = latest.skew - prev;
+      const el = document.getElementById("skew-change");
+      el.textContent = (diff >= 0 ? "+" : "") + diff.toFixed(1);
+      el.classList.add(diff >= 0 ? "pos" : "neg");
+    } else {
+      document.getElementById("skew-change").textContent = "–";
+    }
+
+    // 시그널
+    document.getElementById("current-signal").textContent = latest.signal;
+    const conf = 0.78; // 더미: 신뢰도
+    document.getElementById("signal-confidence").textContent = (conf * 100).toFixed(0) + "%";
+    document.getElementById("signal-strength-label").textContent = "신뢰도 " + (conf * 100).toFixed(0) + "%";
+
+    // 성과
+    document.getElementById("cum-return").textContent = formatPct(performance.cumReturn);
+    document.getElementById("alpha").textContent = "α " + formatPct(performance.cumReturn - performance.benchmarkReturn, 1);
+    document.getElementById("win-rate").textContent = formatPct(performance.winRate, 0);
+    document.getElementById("max-dd").textContent = "MDD " + formatPct(performance.maxDrawdown, 1);
+    document.getElementById("trade-count-label").textContent = "거래 수 " + performance.tradeCount;
+
+    // 테이블
+    const tbody = document.getElementById("signal-table-body");
+    tbody.innerHTML = "";
+    let cumPnl = 0;
+    trades.forEach(t => {
+      cumPnl += t.ret;
+      const tr = document.createElement("tr");
+
+      const tdTime = document.createElement("td");
+      tdTime.textContent = t.time;
+
+      const tdExp = document.createElement("td");
+      tdExp.textContent = t.expiry;
+
+      const tdSkew = document.createElement("td");
+      tdSkew.textContent = t.skew.toFixed(1);
+
+      const tdSig = document.createElement("td");
+      const spanSig = document.createElement("span");
+      spanSig.textContent = t.signal;
+      spanSig.classList.add("signal-pill");
+      if (t.signal === "BUY") spanSig.classList.add("signal-buy");
+      else if (t.signal === "SELL") spanSig.classList.add("signal-sell");
+      tdSig.appendChild(spanSig);
+
+      const tdPrice = document.createElement("td");
+      tdPrice.textContent = t.price.toFixed(1);
+
+      const tdRet = document.createElement("td");
+      tdRet.textContent = formatPct(t.ret, 1);
+
+      const tdCum = document.createElement("td");
+      tdCum.textContent = formatPct(cumPnl, 1);
+
+      tr.append(tdTime, tdExp, tdSkew, tdSig, tdPrice, tdRet, tdCum);
+      tbody.appendChild(tr);
+    });
+
+    const wins = trades.filter(t => t.ret > 0).length;
+    const summary = `총 ${trades.length}건 · 승 ${wins} / 패 ${trades.length - wins}`;
+    document.getElementById("signal-summary").textContent = summary;
+
+    // 오른쪽 패널 값
+    document.getElementById("right-cum-return").textContent = formatPct(performance.cumReturn, 1);
+    document.getElementById("right-benchmark").textContent = formatPct(performance.benchmarkReturn, 1);
+    document.getElementById("right-alpha").textContent = formatPct(performance.cumReturn - performance.benchmarkReturn, 1);
+
+    // PnL 바 (0~50% 구간에서만 시각화, 50% 이상이면 풀)
+    const bar = document.getElementById("pnl-bar");
+    const maxVisible = 50;
+    const ratio = Math.max(0, Math.min(maxVisible, performance.cumReturn)) / maxVisible;
+    bar.style.width = (ratio * 100).toFixed(0) + "%";
+  }
+
+  document.addEventListener("DOMContentLoaded", initDashboard);
+</script>
+</body>
 </html>
